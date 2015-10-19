@@ -14,6 +14,7 @@
 						<div class="container">
 
 							<form class="login-form" method="POST" action="{{ route('register') }}">
+									<input type="hidden" name="_token" value="{{ csrf_token() }}">
 								<div class="login-wrap">
 										<p class="login-img"><i class="icon_lock_alt"></i></p>
 										<div class="input-group">
