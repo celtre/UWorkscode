@@ -56,51 +56,59 @@ Route::get('reset/{token}', 'Auth\PasswordController@getReset');
 Route::post('reset', 'Auth\PasswordController@postReset');
 
 Route::get('formulario', [
+  'middleware' => 'auth',
   'uses' => 'StorageController@index',
   'as'  =>  'file'
   ]);
-Route::post('formulario', 'StorageController@save');
-Route::get('formulario/{archivo}', function ($archivo) {
-    $public_path = storage_path();
-    $tipo = "documentos";
-    $materia = "fisicaI";
-    //verificamos si el archivo existe y lo retornamos
-    $url = $public_path.'/app/'.$tipo.'/'.$materia.'/'.$archivo;
-
-   if (file_exists($url))
-   {
-        return response()->download($url);
-    }
-    //si no se encuentra lanzamos un error 404.
-    abort(404);
-
-});
+Route::post('formulario','StorageController@save');
+Route::get('formulario/{archivo}',[
+  'middleware' => 'auth',
+  'uses'=> 'StorageController@download']);
 
 
-Route::post('eliminar', 'StorageController@destroy');
-Route::get('eliminar/{archivo}', function ($archivo) {
-    $tipo = "documentos";
-    $materia = "webIII";
-    $public_path = storage_path();
-    //$url = "$tipo/$materia/";
-     $url = $public_path.'/app/'.$tipo.'/'.$materia.'/'.$archivo;
-    //verificamos si el archivo existe y lo retornamos
-    if (file_exists($url))
-    {
-        Storage::delete($tipo.'/'.$materia.'/'.$archivo);
-        return 'Se borro con exito';
-    }else{
-      return abort (404);
-    }
 
-    //si no se encuentra lanzamos un error 404.
-  return 'No se deberia llegar aquí';
 
-});
+Route::get('myfiles/eliminar/{nombre}',
+[
+  'middleware' => 'auth',
+  'uses'=>'StorageController@destroy']);
 
 /*
     Manejo de perfil
 */
-Route::get('profile', function(){
-  return view('profile');
-});
+Route::get('profile',[
+  'uses' => 'ProfileController@index',
+  'as' => 'profile'
+  ]);
+
+  Route::post('profile','ProfileController@save');
+
+
+Route::get('myfiles', [
+        'middleware' => 'auth',
+        'uses' => 'StorageController@show',
+        'as' => 'myfiles'
+    ]);
+
+
+Route::get('parciales', [
+          'middleware' => 'auth',
+          'uses' => 'StorageController@showparciales',
+          'as' => 'parciales'
+      ]);
+
+
+Route::get('mylibros', [
+          'middleware' => 'auth',
+          'uses' => 'StorageController@showlibros',
+          'as' => 'mylibros'
+      ]);
+
+    Route::get('subject',[
+      'middleware' => 'auth',
+      'uses' => 'SubjectController@index',
+      'as' => 'subject'
+      ]);
+      Route::post('subject','SubjectController@create');
+
+      Route::get('test', 'testController@index');

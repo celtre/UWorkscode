@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class File extends Model
 {
-  /**
-   * The database table used by the model.
-   *
-   * @var string
-   */
+
   protected $table = 'files';
 
   /**
@@ -19,6 +15,8 @@ class File extends Model
    *
    * @var array
    */
-  protected $fillable = ['nombre', 'descripcion', 'tipo', 'materia'];
+  protected $fillable = ['nombre', 'descripcion', 'tipo', 'materia','nombre_original','hash','path','email'];
+
+
 
 }
